@@ -22,13 +22,11 @@
               name: "{{s3_bucket_name}}"
               region: ap-south-1
               versioning: yes
-        tags:
-        - s3
+  
       - name: Uploading to s3 Bucket
         aws_s3: 
          bucket: "{{s3_bucket_name}}"
          object: "{{csv_file_name}}"
          src: "{{csv_file_name}}"
          mode: put
-        tags:
-        - up
+ 
