@@ -1,0 +1,34 @@
+---
+ - name: EC2 Instance Detail and save it to csv file
+   hosts: localhost
+   connection: local
+   gather_facts: false
+   vars:
+     s3_bucket_name: csvec2info
+     csv_file_name: ec2_instance_info.csv
+   tasks:
+      - name: Info about ec2 using ec2-instance_facts
+        ec2_instance_facts:
+                region: ap-south-1
+        register: out
+
+      - name: Saving to csv file
+        template:
+              src: generate_csv.j2
+              dest: "{{csv_file_name}}"
+
+      - name: Creating S3 Bucket
+        s3_bucket:
+              name: "{{s3_bucket_name}}"
+              region: ap-south-1
+              versioning: yes
+        tags:
+        - s3
+      - name: Uploading to s3 Bucket
+        aws_s3: 
+         bucket: "{{s3_bucket_name}}"
+         object: "{{csv_file_name}}"
+         src: "{{csv_file_name}}"
+         mode: put
+        tags:
+        - up

@@ -1,0 +1,7 @@
+{% set count = 1 %}
+S.NO,Instance_Id,Image_Id,Key_Name
+
+{% for each in out.instances %}
+{{count}},{{each.instance_id}},{{each.image_id}},{{each.key_name}}
+{% set count = count + 1 %}
+{% endfor %}
